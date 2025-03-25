@@ -12,18 +12,19 @@
 int move_player(Dungeon *d, int x, int y){
 
     // Check if the move is invalid (same position, rock, or non-zero hardness)
-    if ((x == d->pc.x && y == d->pc.y) || 
-        (d->grid[y][x].type == ROCK) || 
-        (d->grid[y][x].hardness > 0)) {
+    if (
+        (x == d->pc.x && y == d->pc.y) || 
+        (d->grid[y][x].type == ROCK)   || 
+        (d->grid[y][x].hardness > 0)
+    ) {
         // printf("Player made an invalid move to (%d, %d)\n", x, y);
-        return 0;
+        return -1;
     }
 
     // Check if the new cell is occupied, and kill the occupant
-    if (d->grid[y][x].type != FLOOR &&
-        d->grid[y][x].type != CORRIDOR &&
-        d->grid[y][x].type != UP_STAIRS &&
-        d->grid[y][x].type != DOWN_STAIRS
+    if (
+        (d->grid[y][x].type >= '0' && d->grid[y][x].type <= '9') || 
+        (d->grid[y][x].type >= 'A' && d->grid[y][x].type <= 'F')
     ){
         // printf("Player killed a monster: %c\n", d->grid[y][x].type);
         kill_monster(d, x, y);

@@ -13,4 +13,6 @@ void destroy_ncurses();
 void render_grid(Dungeon *d);
 void render_game_over(Dungeon *d);
 
+void get_input(Dungeon *d);
+
 #endif

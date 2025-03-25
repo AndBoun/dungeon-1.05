@@ -55,11 +55,10 @@ void render_grid(Dungeon *d) {
                 attron(COLOR_PAIR(COLOR_MONSTER_ID));
             }
             
-            mvaddch(i, j, cell_type);
+            mvaddch(i + 1, j + 1, cell_type);
         }
     }
 
-    mvhline(DUNGEON_HEIGHT, 0, ACS_HLINE, DUNGEON_WIDTH);
     refresh();
 }
 
@@ -71,14 +70,77 @@ void render_game_over(Dungeon *d) {
     
     if (!d->pc.alive) {
         int text_len = strlen("Player is dead!");
-        mvprintw(DUNGEON_HEIGHT + 2, (DUNGEON_WIDTH - text_len) / 2, "Player is dead!");
+        mvprintw(0, (DUNGEON_WIDTH - text_len) / 2, "Player is dead!");
     } else if (d->num_monsters_alive == 0) {
         int text_len = strlen("All monsters are dead!");
-        mvprintw(DUNGEON_HEIGHT + 2, (DUNGEON_WIDTH - text_len) / 2, "All monsters are dead!");
+        mvprintw(0, (DUNGEON_WIDTH - text_len) / 2, "All monsters are dead!");
     }
     
     
     refresh();
     timeout(-1);  // Wait indefinitely for a keypress
     getch();
+}
+
+static void handle_player_movement(Dungeon *d, int x, int y) {
+    mvprintw(0, 0, "Player is attempting to move to (%d, %d)", x, y);
+    move_player(d, x, y);
+    // if(!move_player(d, x, y)){
+    //     // If the player can't move, wait for input
+    //     get_input(d);
+    // }
+}
+
+void get_input(Dungeon *d) {
+    timeout(-1);
+    int input = getch();
+
+    switch (input){
+        case '7': // move up-left
+        case 'y':
+            handle_player_movement(d, d->pc.x - 1, d->pc.y - 1);
+            break;
+
+        case '8': // move up
+        case 'k':
+            handle_player_movement(d, d->pc.x, d->pc.y - 1);
+            break;
+
+        case '9': // move up-right
+        case 'u':
+            handle_player_movement(d, d->pc.x + 1, d->pc.y - 1);
+            break;
+        
+        case '6': // move right
+        case 'l':
+            handle_player_movement(d, d->pc.x + 1, d->pc.y);
+            break;
+        
+        case '3': // move down-right
+        case 'n':
+            handle_player_movement(d, d->pc.x + 1, d->pc.y + 1);
+            break;
+
+        case '2': // move down
+        case 'j':
+            handle_player_movement(d, d->pc.x, d->pc.y + 1);
+            break;
+
+        case '1': // move down-left
+        case 'b':
+            handle_player_movement(d, d->pc.x - 1, d->pc.y + 1);
+            break;
+
+        case '4': // move left
+        case 'h':
+            handle_player_movement(d, d->pc.x - 1, d->pc.y);
+            break;
+
+        case 'q': // quit
+            destroy_ncurses();
+            printf("Game terminated by user\n");
+            exit(0);
+            break;
+
+    }
 }

@@ -133,12 +133,9 @@ void start_gameplay(Dungeon *d){
         pq_insert(pq, i + 1, NULL, 0); // all entities start at time 0
     }
 
-    // print_grid(d); // Print the grid before the game starts
-    // printf("monsters: %d\n", d->num_monsters);
-    // printf("alive: %d\n", d->num_monsters_alive);
+    // render_grid(d); // Render the dungeon
 
     while (d->pc.alive && d ->num_monsters_alive > 0) {
-        // usleep(GAME_SPEED);
 
         int entity_id = pq_get_min_key(pq);
         int current_time = pq_get_priority(pq, entity_id);
@@ -146,12 +143,9 @@ void start_gameplay(Dungeon *d){
 
 
         if (entity_id == PLAYER_ID) { // Player's turn
-            // move_player(d, d->pc.x, d->pc.y);
-            // move_player_randomly(d);
-            next_time = current_time + calculate_timing(d->pc.speed);
-            // print_grid(d); // Print the grid after each turn
             render_grid(d); // Render the dungeon
-            usleep(GAME_SPEED);
+            get_input(d); // Get player input
+            next_time = current_time + calculate_timing(d->pc.speed);
         } else {
             // Check if the entity is alive, if not, skip
             if (!d->monsters[entity_id - 1].alive) {
@@ -161,24 +155,12 @@ void start_gameplay(Dungeon *d){
             move_monster(&d->monsters[entity_id - 1], d);
             next_time = current_time + calculate_timing(d->monsters[entity_id - 1].speed);
         }
-        // print_grid(d); // Print the grid after each turn
         
         // Reschedule entity's next turn
         pq_extract_min(pq);
         pq_insert(pq, entity_id, NULL, next_time);
     }
 
-    // Ending game message
-    if (d->pc.alive == 0){
-        // print_grid(d); // Print the grid after the game ends
-        // printf("Player is dead.\n");
-    } 
-        
-    if (d->num_monsters_alive == 0) {
-        // printf("All monsters are dead.\n");
-    }
-
     render_game_over(d);
-
     pq_destroy(pq);
 }
