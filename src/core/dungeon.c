@@ -5,6 +5,7 @@
 #include <dungeon.h>
 #include <priority_queue.h>
 #include <character.h>
+#include <ncurses_ui.h>
 
 #include <stdlib.h>
 #include <stdbool.h>
@@ -132,9 +133,9 @@ void start_gameplay(Dungeon *d){
         pq_insert(pq, i + 1, NULL, 0); // all entities start at time 0
     }
 
-    print_grid(d); // Print the grid before the game starts
-    printf("monsters: %d\n", d->num_monsters);
-    printf("alive: %d\n", d->num_monsters_alive);
+    // print_grid(d); // Print the grid before the game starts
+    // printf("monsters: %d\n", d->num_monsters);
+    // printf("alive: %d\n", d->num_monsters_alive);
 
     while (d->pc.alive && d ->num_monsters_alive > 0) {
         // usleep(GAME_SPEED);
@@ -146,9 +147,10 @@ void start_gameplay(Dungeon *d){
 
         if (entity_id == PLAYER_ID) { // Player's turn
             // move_player(d, d->pc.x, d->pc.y);
-            move_player_randomly(d);
+            // move_player_randomly(d);
             next_time = current_time + calculate_timing(d->pc.speed);
-            print_grid(d); // Print the grid after each turn
+            // print_grid(d); // Print the grid after each turn
+            render_grid(d); // Render the dungeon
             usleep(GAME_SPEED);
         } else {
             // Check if the entity is alive, if not, skip
@@ -168,13 +170,15 @@ void start_gameplay(Dungeon *d){
 
     // Ending game message
     if (d->pc.alive == 0){
-        print_grid(d); // Print the grid after the game ends
-        printf("Player is dead.\n");
+        // print_grid(d); // Print the grid after the game ends
+        // printf("Player is dead.\n");
     } 
         
     if (d->num_monsters_alive == 0) {
-        printf("All monsters are dead.\n");
+        // printf("All monsters are dead.\n");
     }
+
+    render_game_over(d);
 
     pq_destroy(pq);
 }

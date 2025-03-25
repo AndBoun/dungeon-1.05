@@ -12,6 +12,7 @@
 #include <dungeon.h>
 #include <load_save.h>
 #include <dijkstra.h>
+#include <ncurses_ui.h>
 
 int main(int argc, char *argv[]) {
     struct timeval tv;
@@ -40,20 +41,24 @@ int main(int argc, char *argv[]) {
 
     if (load_flag) {
         load(&d);
-        print_grid(&d);
+        // print_grid(&d);
     } else {
         generate_random_dungeon(&d);
-        print_grid(&d);
+        // print_grid(&d);
     }
 
     if (save_flag) {
         save(&d);
-        printf("Dungeon saved.\n");
+        // printf("Dungeon saved.\n");
     }
+
+    init_ncurses();
 
     start_gameplay(&d);
 
     destroy_dungeon(&d);
+
+    destroy_ncurses();
 
     return 0;
 }

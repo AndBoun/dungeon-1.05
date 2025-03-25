@@ -3,6 +3,7 @@ CFLAGS = -g -Wall -Werror
 INCLUDE_DIR = include
 SRC_DIR = src
 OBJ_DIR = obj
+LDFLAGS = -lncurses
 
 # Create directory structure for object files
 DIRS = $(OBJ_DIR) $(OBJ_DIR)/core $(OBJ_DIR)/generation $(OBJ_DIR)/io $(OBJ_DIR)/path_finding $(OBJ_DIR)/movement
@@ -37,7 +38,7 @@ dirs:
 	@mkdir -p $(DIRS)
 
 $(TARGET): $(ALL_OBJ)
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 # Compile main.c
 $(OBJ_DIR)/main.o: $(MAIN_SRC)
