@@ -37,7 +37,7 @@ void destroy_ncurses() {
 }
 
 void render_grid(Dungeon *d) {
-    clear();
+    // clear();
     
     // Draw the dungeon grid with colors based on cell type
     for (int i = 0; i < DUNGEON_HEIGHT; i++) {
@@ -83,12 +83,11 @@ void render_game_over(Dungeon *d) {
 }
 
 static void handle_player_movement(Dungeon *d, int x, int y) {
-    mvprintw(0, 0, "Player is attempting to move to (%d, %d)", x, y);
-    move_player(d, x, y);
-    // if(!move_player(d, x, y)){
-    //     // If the player can't move, wait for input
-    //     get_input(d);
-    // }
+    if(!move_player(d, x, y)){
+        mvprintw(0, 0, "Invalid Player Movement, Try Again");
+        refresh();
+        get_input(d); // If the player can't move, wait for input
+    }
 }
 
 void get_input(Dungeon *d) {
@@ -135,6 +134,13 @@ void get_input(Dungeon *d) {
         case 'h':
             handle_player_movement(d, d->pc.x - 1, d->pc.y);
             break;
+
+        case '5':
+        case '.':
+        case ' ': 
+            mvprintw(0, 0, "Skipped Turn");
+            refresh();
+            break; // Skip turn
 
         case 'q': // quit
             destroy_ncurses();

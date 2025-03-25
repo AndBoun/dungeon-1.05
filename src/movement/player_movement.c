@@ -18,7 +18,7 @@ int move_player(Dungeon *d, int x, int y){
         (d->grid[y][x].hardness > 0)
     ) {
         // printf("Player made an invalid move to (%d, %d)\n", x, y);
-        return -1;
+        return 0;
     }
 
     // Check if the new cell is occupied, and kill the occupant
@@ -42,7 +42,7 @@ int move_player(Dungeon *d, int x, int y){
     create_non_tunneling_map(d, d->pc.x, d->pc.y);
     create_tunneling_map(d, d->pc.x, d->pc.y);
 
-    return 0;
+    return 1;
 }
 
 // Duplicated code, remove later once random player movement isn't needed
