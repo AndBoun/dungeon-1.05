@@ -14,7 +14,19 @@
 #define COLOR_DEFAULT_ID 1
 #define COLOR_PLAYER_ID 2
 #define COLOR_STAIR_ID 3
+#define COLOR_SUCCESS_ID 3
 #define COLOR_MONSTER_ID 4
+#define COLOR_ERROR_ID 5
+#define COLOR_WARNING_ID 6
+
+// Function declarations
+void init_ncurses();
+void destroy_ncurses();
+void render_grid(Dungeon *d);
+void render_game_over(Dungeon *d);
+int handle_player_movement(Dungeon *d, int x, int y);
+int handle_monster_list(Dungeon *d);
+int get_input(Dungeon *d);
 
 
 void init_ncurses() {
@@ -28,12 +40,27 @@ void init_ncurses() {
 
     init_pair(COLOR_DEFAULT_ID, COLOR_WHITE, COLOR_BLACK);    // Default
     init_pair(COLOR_PLAYER_ID, COLOR_MAGENTA, COLOR_YELLOW);  // Player
-    init_pair(COLOR_STAIR_ID, COLOR_GREEN, COLOR_BLACK);      // Cooridor
+    init_pair(COLOR_STAIR_ID, COLOR_GREEN, COLOR_BLACK);      // Stairs and Success
     init_pair(COLOR_MONSTER_ID, COLOR_CYAN, COLOR_RED);       // Monster
+    init_pair(COLOR_ERROR_ID, COLOR_RED, COLOR_BLACK);        // ERROR
+    init_pair(COLOR_WARNING_ID, COLOR_YELLOW, COLOR_BLACK);   // Warning
 }
 
 void destroy_ncurses() {
     endwin();
+}
+
+void render_top_bar(const char *message, int color_id) {
+    // Clear the top bar
+    move(0, 0);
+    clrtoeol();
+    
+    // Set color and print message
+    attron(COLOR_PAIR(color_id));
+    mvprintw(0, (DUNGEON_WIDTH - strlen(message)) / 2, "%s", message);
+    attroff(COLOR_PAIR(color_id));
+    
+    refresh();
 }
 
 void render_grid(Dungeon *d) {
@@ -80,27 +107,6 @@ void render_game_over(Dungeon *d) {
     refresh();
     timeout(-1);  // Wait indefinitely for a keypress
     getch();
-}
-
-int handle_player_movement(Dungeon *d, int x, int y) {
-    mvprintw(0, 0, "Player at to (%d, %d) \t Player moving to: (%d, %d)", d->pc.x, d->pc.y, x, y);
-    refresh();
-
-    int move_result = move_player(d, x, y);
-    
-    if (move_result == 0) { // invalid move
-        move(0, 0);
-        clrtoeol();  // Clear the current line
-        mvprintw(0, 0, "Invalid Player Movement, Try Again");
-        refresh();
-        return 0;  // Return invalid movement code
-    } else if (move_result == MOVEMENT_STAIRS) {
-        mvprintw(0, 0, "handle movement stairs -2");
-        refresh();
-        return MOVEMENT_STAIRS; // Return stairs code
-    }
-
-    return 1; // Return successful movement
 }
 
 int get_input(Dungeon *d) {   
@@ -155,15 +161,15 @@ int get_input(Dungeon *d) {
             case '5':
             case '.':
             case ' ': 
-                refresh();
+                render_top_bar("Player Skipped Their Turn", COLOR_WARNING_ID);
                 return 1; // Skip turn
                 
             case '<': // Up stairs
-                result = handle_player_movement(d, -2, -2);
+                result = handle_player_movement(d, -2, -2); // -2 for up stairs
                 break;
                 
             case '>': // Down stairs
-                result = handle_player_movement(d, -3, -3);
+                result = handle_player_movement(d, -3, -3); // -3 for down stairs
                 break;
                 
             case 'q': // quit
@@ -171,12 +177,14 @@ int get_input(Dungeon *d) {
                 printf("Game terminated by user\n");
                 exit(0);
                 break;
+            
+            case 'm': // Monster list
+                result = 0; // no movement, run loop again
+                handle_monster_list(d);
+                break;
                 
             default:
-                move(0, 0);
-                clrtoeol();
-                mvprintw(0, 0, "Invalid Input");
-                refresh();
+                render_top_bar("Invalid Input", COLOR_ERROR_ID);
                 continue; // Get input again
         }
         
@@ -184,4 +192,25 @@ int get_input(Dungeon *d) {
         if (result == MOVEMENT_STAIRS) return MOVEMENT_STAIRS;
         if (result == 1) return 1;
     }
+}
+
+int handle_player_movement(Dungeon *d, int x, int y) {
+    // mvprintw(0, 0, "Player at to (%d, %d) \t Player moving to: (%d, %d)", d->pc.x, d->pc.y, x, y);
+    // refresh();
+
+    char s[100];
+    snprintf(s, sizeof(s), "Player at (%d, %d) \t Player moving to: (%d, %d)", d->pc.x, d->pc.y, x, y);
+    render_top_bar(s, COLOR_DEFAULT_ID);
+
+    int move_result = move_player(d, x, y);
+    
+    if (move_result == 0) { // invalid move
+        render_top_bar("Invalid Player Movement, Try Again", COLOR_ERROR_ID);
+        return 0;  // Return invalid movement code
+    } else if (move_result == MOVEMENT_STAIRS) {
+        render_top_bar("Player uses stairs", COLOR_STAIR_ID);
+        return MOVEMENT_STAIRS; // Return stairs code
+    }
+
+    return 1; // Return successful movement
 }

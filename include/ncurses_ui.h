@@ -11,11 +11,12 @@
 void init_ncurses();
 void destroy_ncurses();
 
+void render_top_bar(const char *message, int color_id);
+
 void render_grid(Dungeon *d);
 void render_game_over(Dungeon *d);
 
 int get_input(Dungeon *d);
-
-int handle_player_movement(Dungeon *d, int x, int y);
+int handle_monster_list(Dungeon *d);
 
 #endif
