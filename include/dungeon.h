@@ -52,6 +52,10 @@
 // The grid will reset and try again
 #define MAX_ATTEMPTS 2000
 
+#define MOVEMENT_INVALID 0
+#define MOVEMENT_SUCCESS 1
+#define MOVEMENT_STAIRS -2
+
 typedef struct {
     int x, y;       // top-left coordinate (not including border)
     int width, height;
@@ -105,6 +109,8 @@ bool generate_random_room(Dungeon *d, int idx);
 
 int generate_random_stair(Dungeon *d, char stair, int idx);
 bool place_stair(Dungeon *d, int x, int y, char stair);
+int is_up_stair(Dungeon *d, int x, int y);
+int is_down_stair(Dungeon *d, int x, int y);
 
 void print_room_info(const Dungeon *d);
 void print_hardness_info(const Dungeon *d);
@@ -113,7 +119,6 @@ void print_grid(Dungeon *d);
 int place_player_randomly(Dungeon *d);
 int place_player(Dungeon *d, int x, int y);
 int move_player(Dungeon *d, int x, int y);
-int move_player_randomly(Dungeon *d);
 
 int place_monster_randomly(Dungeon *d, int idx);
 int initialize_monsters(Dungeon *d);
@@ -125,10 +130,11 @@ int kill_monster(Dungeon *d, int x, int y);
 bool generate_random_dungeon(Dungeon *d);
 
 void destroy_dungeon(Dungeon *d);
+void reset_dungeon(Dungeon *d);
 
 void print_dist_map(const int dist_map[DUNGEON_HEIGHT][DUNGEON_WIDTH]);
 
-void start_gameplay(Dungeon *d);
+int start_gameplay(Dungeon *d);
 
 int print_x_grid(Dungeon *d);
 

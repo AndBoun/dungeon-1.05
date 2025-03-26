@@ -82,71 +82,106 @@ void render_game_over(Dungeon *d) {
     getch();
 }
 
-static void handle_player_movement(Dungeon *d, int x, int y) {
-    if(!move_player(d, x, y)){
+int handle_player_movement(Dungeon *d, int x, int y) {
+    mvprintw(0, 0, "Player at to (%d, %d) \t Player moving to: (%d, %d)", d->pc.x, d->pc.y, x, y);
+    refresh();
+
+    int move_result = move_player(d, x, y);
+    
+    if (move_result == 0) { // invalid move
+        move(0, 0);
+        clrtoeol();  // Clear the current line
         mvprintw(0, 0, "Invalid Player Movement, Try Again");
         refresh();
-        get_input(d); // If the player can't move, wait for input
+        return 0;  // Return invalid movement code
+    } else if (move_result == MOVEMENT_STAIRS) {
+        mvprintw(0, 0, "handle movement stairs -2");
+        refresh();
+        return MOVEMENT_STAIRS; // Return stairs code
     }
+
+    return 1; // Return successful movement
 }
 
-void get_input(Dungeon *d) {
-    timeout(-1);
-    int input = getch();
-
-    switch (input){
-        case '7': // move up-left
-        case 'y':
-            handle_player_movement(d, d->pc.x - 1, d->pc.y - 1);
-            break;
-
-        case '8': // move up
-        case 'k':
-            handle_player_movement(d, d->pc.x, d->pc.y - 1);
-            break;
-
-        case '9': // move up-right
-        case 'u':
-            handle_player_movement(d, d->pc.x + 1, d->pc.y - 1);
-            break;
+int get_input(Dungeon *d) {   
+    while (1) {
+        timeout(-1);
+        int input = getch();
+        int result;
         
-        case '6': // move right
-        case 'l':
-            handle_player_movement(d, d->pc.x + 1, d->pc.y);
-            break;
         
-        case '3': // move down-right
-        case 'n':
-            handle_player_movement(d, d->pc.x + 1, d->pc.y + 1);
-            break;
-
-        case '2': // move down
-        case 'j':
-            handle_player_movement(d, d->pc.x, d->pc.y + 1);
-            break;
-
-        case '1': // move down-left
-        case 'b':
-            handle_player_movement(d, d->pc.x - 1, d->pc.y + 1);
-            break;
-
-        case '4': // move left
-        case 'h':
-            handle_player_movement(d, d->pc.x - 1, d->pc.y);
-            break;
-
-        case '5':
-        case '.':
-        case ' ': 
-            mvprintw(0, 0, "Skipped Turn");
-            refresh();
-            break; // Skip turn
-
-        case 'q': // quit
-            destroy_ncurses();
-            printf("Game terminated by user\n");
-            exit(0);
-            break;
-
+        // Process directional keys
+        switch (input) {
+            case '7': // move up-left
+            case 'y':
+                result = handle_player_movement(d, d->pc.x - 1, d->pc.y - 1);
+                break;
+                
+            case '8': // move up
+            case 'k':
+                result = handle_player_movement(d, d->pc.x, d->pc.y - 1);
+                break;
+                
+            case '9': // move up-right
+            case 'u':
+                result = handle_player_movement(d, d->pc.x + 1, d->pc.y - 1);
+                break;
+                
+            case '6': // move right
+            case 'l':
+                result = handle_player_movement(d, d->pc.x + 1, d->pc.y);
+                break;
+                
+            case '3': // move down-right
+            case 'n':
+                result = handle_player_movement(d, d->pc.x + 1, d->pc.y + 1);
+                break;
+                
+            case '2': // move down
+            case 'j':
+                result = handle_player_movement(d, d->pc.x, d->pc.y + 1);
+                break;
+                
+            case '1': // move down-left
+            case 'b':
+                result = handle_player_movement(d, d->pc.x - 1, d->pc.y + 1);
+                break;
+                
+            case '4': // move left
+            case 'h':
+                result = handle_player_movement(d, d->pc.x - 1, d->pc.y);
+                break;
+            
+            case '5':
+            case '.':
+            case ' ': 
+                refresh();
+                return 1; // Skip turn
+                
+            case '<': // Up stairs
+                result = handle_player_movement(d, -2, -2);
+                break;
+                
+            case '>': // Down stairs
+                result = handle_player_movement(d, -3, -3);
+                break;
+                
+            case 'q': // quit
+                destroy_ncurses();
+                printf("Game terminated by user\n");
+                exit(0);
+                break;
+                
+            default:
+                move(0, 0);
+                clrtoeol();
+                mvprintw(0, 0, "Invalid Input");
+                refresh();
+                continue; // Get input again
+        }
+        
+        // Process the result from movement
+        if (result == MOVEMENT_STAIRS) return MOVEMENT_STAIRS;
+        if (result == 1) return 1;
     }
 }

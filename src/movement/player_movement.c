@@ -9,13 +9,27 @@
 #include <dungeon.h>
 #include <dijkstra.h>
 
+#include <ncurses_ui.h>
+
+#include <unistd.h>
+
 int move_player(Dungeon *d, int x, int y){
+
+    // Check stairs
+    if (
+        (x == -2 && y == -2 && is_up_stair(d, d->pc.x, d->pc.y)) || 
+        (x == -3 && y == -3 && is_down_stair(d, d->pc.x, d->pc.y))
+    ) {
+        return -2; // Up or down stairs
+    }
 
     // Check if the move is invalid (same position, rock, or non-zero hardness)
     if (
         (x == d->pc.x && y == d->pc.y) || 
         (d->grid[y][x].type == ROCK)   || 
-        (d->grid[y][x].hardness > 0)
+        (d->grid[y][x].hardness > 0)   ||
+        (x < 0 || x >= DUNGEON_WIDTH - 1)  || 
+        (y < 0 || y >= DUNGEON_HEIGHT - 1)
     ) {
         // printf("Player made an invalid move to (%d, %d)\n", x, y);
         return 0;
@@ -43,60 +57,4 @@ int move_player(Dungeon *d, int x, int y){
     create_tunneling_map(d, d->pc.x, d->pc.y);
 
     return 1;
-}
-
-// Duplicated code, remove later once random player movement isn't needed
-// Randomly move a monster, used for erratic and unintelligent monsters
-static Point get_next_random_move(Dungeon *d, int x, int y, int tunneling)
-{
-    Point p;
-    Point valid_moves[8]; // Store valid adjacent coordinates
-    int valid_count = 0;
-
-    // Check all 8 adjacent cells
-    for (int dy = -1; dy <= 1; dy++)
-    {
-        for (int dx = -1; dx <= 1; dx++)
-        {
-            // Skip the cell itself (0,0)
-            if (dx == 0 && dy == 0)
-                continue;
-
-            int new_x = x + dx;
-            int new_y = y + dy;
-
-            // If valid, add to our list of valid moves
-            if (new_x >= 0 && new_x < DUNGEON_WIDTH && new_y >= 0 && new_y < DUNGEON_HEIGHT &&
-                d->grid[new_y][new_x].hardness == 0)
-            {
-                valid_moves[valid_count].x = new_x;
-                valid_moves[valid_count].y = new_y;
-                valid_count++;
-            }
-        }
-    }
-
-    // If we have valid moves, randomly select one
-    if (valid_count > 0)
-    {
-        int choice = rand() % valid_count;
-        p = valid_moves[choice];
-    }
-    else
-    {
-        // No valid moves, stay in place
-        p.x = x;
-        p.y = y;
-    }
-
-    return p;
-}
-
-int move_player_randomly(Dungeon *d){
-    Point p = get_next_random_move(d, d->pc.x, d->pc.y, 0);
-    int x = p.x, y = p.y;
-
-    move_player(d, x, y);
-
-    return 0;
 }

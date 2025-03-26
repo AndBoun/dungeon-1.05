@@ -112,12 +112,19 @@ void destroy_dungeon(Dungeon *d){
     return;
 }
 
+void reset_dungeon(Dungeon *d){
+    destroy_dungeon(d);
+    init_dungeon(d);
+    d->num_monsters = DEFAULT_NUM_MONSTERS;
+    generate_random_dungeon(d);
+}
+
 // Calculate the timing for each entity based on their speed
 static int calculate_timing(int speed) {
     return 1000 / speed;
 }
 
-void start_gameplay(Dungeon *d){
+int start_gameplay(Dungeon *d){
     initialize_monsters(d);
     int num_entities = d->num_monsters + 1;
 
@@ -144,7 +151,18 @@ void start_gameplay(Dungeon *d){
 
         if (entity_id == PLAYER_ID) { // Player's turn
             render_grid(d); // Render the dungeon
-            get_input(d); // Get player input
+
+            if (get_input(d) == -2){
+                pq_destroy(pq);
+                return -2;
+            }
+
+            // print_grid(d);
+            // d->grid[d->pc.y][d->pc.x].type = DOWN_STAIRS;
+            // move_player(d, -3, -3);
+            // print_grid(d);
+            // exit(-1);
+
             next_time = current_time + calculate_timing(d->pc.speed);
         } else {
             // Check if the entity is alive, if not, skip
@@ -163,4 +181,6 @@ void start_gameplay(Dungeon *d){
 
     render_game_over(d);
     pq_destroy(pq);
+
+    return 1;
 }

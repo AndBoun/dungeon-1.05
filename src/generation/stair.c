@@ -36,3 +36,21 @@ int generate_random_stair(Dungeon *d, char stair, int idx){
     
     return 1;
 }
+
+int is_up_stair(Dungeon *d, int x, int y){
+    for (int i = 0; i < d->num_up_stairs; i++){
+        if (d->up_stairs[i].x == x && d->up_stairs[i].y == y){
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int is_down_stair(Dungeon *d, int x, int y){
+    for (int i = 0; i < d->num_down_stairs; i++){
+        if (d->down_stairs[i].x == x && d->down_stairs[i].y == y){
+            return 1;
+        }
+    }
+    return 0;
+}

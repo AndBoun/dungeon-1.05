@@ -14,6 +14,7 @@
 #include <dijkstra.h>
 #include <ncurses_ui.h>
 
+
 int main(int argc, char *argv[]) {
     struct timeval tv;
     gettimeofday(&tv, NULL);
@@ -52,9 +53,23 @@ int main(int argc, char *argv[]) {
         // printf("Dungeon saved.\n");
     }
 
-    init_ncurses();
+    // print_grid(&d);
+    // reset_dungeon(&d);
+    // print_grid(&d);
 
-    start_gameplay(&d);
+    // print_grid(&d);
+    // d.pc.x = 38, d.pc.y = 13;
+    // handle_player_movement(&d, -2, -2);
+    // // move_player(&d, -2, -2);
+    // printf("%c", d.grid[13][38].type);
+
+    init_ncurses();
+    
+    // start_gameplay(&d);
+
+    while (start_gameplay(&d) == -2){
+        reset_dungeon(&d);
+    }
 
     destroy_dungeon(&d);
 
