@@ -17,7 +17,7 @@
 
 int main(int argc, char *argv[]) {
     struct timeval tv;
-    gettimeofday(&tv, NULL);
+    gettimeofday(&tv, NULL); 
     srand(tv.tv_usec ^ getpid());
 
     Dungeon d;
