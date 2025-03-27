@@ -33,6 +33,7 @@ src/
 ## Constraints:
 - All files and inputs are assumed to be valid
 - There is no limit on the number of monsters, but too high of an input will cause an infinite loop, as there's no space to place monsters
+- The monster list will only show a maximum of 10 monsters at once
 
 ## Additional Notes
 - If the user enter an invalid input, the game pauses and until they make a correct move. To skip a turn, the user must specifically pass their turn.
