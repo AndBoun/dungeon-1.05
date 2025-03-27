@@ -87,7 +87,7 @@ static int print_monster_list(Dungeon *d, Monster alive[], int scroll){
         if (relative_x < 0) {
             mvprintw(j, 35, "%d West", -relative_x);
         } else if (relative_x == 0) {
-            mvprintw(j, 35, "Here", relative_x);
+            mvprintw(j, 35, "Here");
         }
         else {
             mvprintw(j, 35, "%d East", relative_x);
@@ -96,7 +96,7 @@ static int print_monster_list(Dungeon *d, Monster alive[], int scroll){
         if (relative_y < 0) {
             mvprintw(j, 69, "%d North", -relative_y);
         } else if (relative_y == 0) {
-            mvprintw(j, 69, "Here", relative_y);
+            mvprintw(j, 69, "Here");
         }
         else {
             mvprintw(j, 69, "%d South", relative_y);
