@@ -42,7 +42,10 @@ src/
 ## How the Project Runs:
 After loading and generating the Dungeon in `main.c`, the program calls `init_ncurses()` in `ncurses_ui.c` to create the UI. Then `start_gameplay()` in `dungeon.c`. This method will call `get_input()` which takes player input then calls the respective methods. When traveling using stairs, the coordinate values `(-2, -2)` indicate going upstairs, and `(-3, -3)` indicate going downstairs. When the movement function explicitly returns `-2` or `MOVEMENT_STAIRS`, this means the player correct traveled through stairs, and the dungeon needs to be regenerate.
 
-To regenerate when the player uses a stair, first the program calls `start_gameplay()` then `get_input()`, then `handle_player_movement()` in `ncurses_ui.c`, which calls `move_player()` in `player_movement.c`. This function will return `-2`, which makes `handle_player_movement()`, which also makes `get_input()` return `-2`. Now the `start_gameplay()` method terminates, then back in `main.c`,  the dungeon will be reset with `reset_dungeon()` and gameplay will start again.
+To regenerate when the player uses a stair, first the program calls `start_gameplay()` then `get_input()`, then `handle_player_movement()` in `ncurses_ui.c`, which calls `move_player()` in `player_movement.c`. This function will return `-2`, which makes `handle_player_movement()`, which also makes `get_input()` return `-2
+
+
+`. Now the `start_gameplay()` method terminates, then back in `main.c`,  the dungeon will be reset with `reset_dungeon()` and gameplay will start again.
 
 # Example Gameplay:
-<img src="docs/1.05_Gameplay.gif" alt="Gameplay demonstration" width="600"/>
+https://github.com/user-attachments/assets/b69686fc-56af-42d4-81d8-cee3cc53a63c
