@@ -71,15 +71,15 @@ static int print_monster_list(Dungeon *d, Monster alive[], int scroll){
     if (scroll < 0) { scroll = 0; }
     
     // Print the header
-    mvprintw(1, 1, "Monster");
-    mvprintw(1, 35, "Lateral Distance");
-    mvprintw(1, 69, "Longitudinal Distance");
+    mvprintw(1, 0, "Monster");
+    mvprintw(1, 35, "X Distance");
+    mvprintw(1, 70, "Y Distance");
     
     int c = 0; // counter number of lines, max of 10 lines
 
     for (int i = scroll; i < d-> num_monsters_alive && c < 10; i++){
 
-        mvprintw(j, 1, "%c", alive[i].symbol);
+        mvprintw(j, 0, "%c", alive[i].symbol);
 
         int relative_x = alive[i].x - d->pc.x;
         int relative_y = alive[i].y - d->pc.y;
@@ -95,12 +95,12 @@ static int print_monster_list(Dungeon *d, Monster alive[], int scroll){
         }
 
         if (relative_y < 0) {
-            mvprintw(j, 69, "%d North", -relative_y);
+            mvprintw(j, 70, "%d North", -relative_y);
         } else if (relative_y == 0) {
-            mvprintw(j, 69, "Here");
+            mvprintw(j, 70, "Here");
         }
         else {
-            mvprintw(j, 69, "%d South", relative_y);
+            mvprintw(j, 70, "%d South", relative_y);
         }
         
         c++; // increment line counter
