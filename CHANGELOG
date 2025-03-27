@@ -1,0 +1,59 @@
+commit 2d083d355f3bdbb8ada215afa31f9bab3e3502bb
+Author: AndBoun <167598896+AndBoun@users.noreply.github.com>
+Date:   Wed Mar 26 21:13:55 2025 -0500
+
+    Write README
+
+commit cca2de1434d8cec11f5056f1d3f0169956be2bfe
+Author: AndBoun <167598896+AndBoun@users.noreply.github.com>
+Date:   Wed Mar 26 20:47:56 2025 -0500
+
+    Fix bug, where monster list wouldn't be display whenever the number of monster alive was less than 10.
+
+commit b04cb16ac67ec4d0bb6c25334ee4ee8d8cf98ee6
+Author: AndBoun <167598896+AndBoun@users.noreply.github.com>
+Date:   Wed Mar 26 20:18:26 2025 -0500
+
+    Implement monsterlist and scrolling.
+
+commit 81fcf81c6e6736352773eaeeb996dc3971f64ff9
+Author: AndBoun <167598896+AndBoun@users.noreply.github.com>
+Date:   Wed Mar 26 15:30:54 2025 -0500
+
+    Added helper method for rendering top bar messages. Created method stubs for monster list.
+
+commit dcad26ac8daaff56b1e14bab7ed2acbf64129f15
+Author: AndBoun <167598896+AndBoun@users.noreply.github.com>
+Date:   Wed Mar 26 02:35:52 2025 -0500
+
+    Added stairs functionality.
+
+commit 7d8c188653d31ea1a1d02dc39701c812828b3d0b
+Author: AndBoun <167598896+AndBoun@users.noreply.github.com>
+Date:   Tue Mar 25 17:43:36 2025 -0500
+
+    Add abilty to rest for a turn. Added checks for player movement.
+
+commit 631135906d414aada686405d224dbdcdc100fa32
+Author: AndBoun <167598896+AndBoun@users.noreply.github.com>
+Date:   Tue Mar 25 16:13:06 2025 -0500
+
+    Add player movements, without extra checks
+
+commit d4ddff62f7bf36a47c552e7a1ee6a38be441dc2e
+Author: AndBoun <167598896+AndBoun@users.noreply.github.com>
+Date:   Tue Mar 25 14:47:21 2025 -0500
+
+    Add grid and gameover output with ncurses.
+
+commit 296380a207a0e1cb17c7ee2ffb832f5397053b49
+Author: AndBoun <167598896+AndBoun@users.noreply.github.com>
+Date:   Sat Mar 22 23:31:33 2025 -0500
+
+    add dungeon 1.04
+
+commit dbf15cc6798b745d8870a607a56ae3f29923e2fd
+Author: Andrew Boun <167598896+AndBoun@users.noreply.github.com>
+Date:   Sat Mar 22 23:26:16 2025 -0500
+
+    Initial commit
