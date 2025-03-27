@@ -48,6 +48,10 @@ To regenerate when the player uses a stair, first the program calls `start_gamep
 `. Now the `start_gameplay()` method terminates, then back in `main.c`,  the dungeon will be reset with `reset_dungeon()` and gameplay will start again.
 
 # Example Gameplay:
+
+## Video:
 https://github.com/user-attachments/assets/b69686fc-56af-42d4-81d8-cee3cc53a63c
+
+## GIF:
 ![1 05_gameplay](https://github.com/user-attachments/assets/51d2e122-3796-4f4a-8748-89d20c2a4353)
 
