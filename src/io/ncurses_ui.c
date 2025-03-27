@@ -50,7 +50,15 @@ void destroy_ncurses() {
     endwin();
 }
 
-void render_top_bar(const char *message, int color_id) {
+void render_top_bar(int color_id, const char *format, ...) {
+    char message[100];
+    va_list args;
+    
+    // Format the string with the variable arguments
+    va_start(args, format);
+    vsnprintf(message, sizeof(message), format, args);
+    va_end(args);
+    
     // Clear the top bar
     move(0, 0);
     clrtoeol();
@@ -96,20 +104,22 @@ void render_game_over(Dungeon *d) {
     render_grid(d);
     
     if (!d->pc.alive) {
-        int text_len = strlen("Player is dead!");
-        mvprintw(0, (DUNGEON_WIDTH - text_len) / 2, "Player is dead!");
+        render_top_bar(COLOR_ERROR_ID, "Player Died, press 'q' to quit");
     } else if (d->num_monsters_alive == 0) {
-        int text_len = strlen("All monsters are dead!");
-        mvprintw(0, (DUNGEON_WIDTH - text_len) / 2, "All monsters are dead!");
+        render_top_bar(COLOR_SUCCESS_ID, "All Monsters are Dead, press 'q' to quit");
     }
     
     
-    refresh();
-    timeout(-1);  // Wait indefinitely for a keypress
-    getch();
+    // Render top bar handles rerendering, so we don't need to call it again
+
+    int input;
+    do {
+        timeout(-1);
+        input = getch();
+    } while (input != 'q');
 }
 
-int get_input(Dungeon *d) {   
+int get_input(Dungeon *d) {
     while (1) {
         timeout(-1);
         int input = getch();
@@ -161,7 +171,7 @@ int get_input(Dungeon *d) {
             case '5':
             case '.':
             case ' ': 
-                render_top_bar("Player Skipped Their Turn", COLOR_WARNING_ID);
+                render_top_bar(COLOR_WARNING_ID, "Player Skipped Their Turn");
                 return 1; // Skip turn
                 
             case '<': // Up stairs
@@ -184,7 +194,7 @@ int get_input(Dungeon *d) {
                 break;
                 
             default:
-                render_top_bar("Invalid Input", COLOR_ERROR_ID);
+                render_top_bar(COLOR_ERROR_ID, "Invalid Input");
                 continue; // Get input again
         }
         
@@ -195,20 +205,19 @@ int get_input(Dungeon *d) {
 }
 
 int handle_player_movement(Dungeon *d, int x, int y) {
-    // mvprintw(0, 0, "Player at to (%d, %d) \t Player moving to: (%d, %d)", d->pc.x, d->pc.y, x, y);
-    // refresh();
-
-    char s[100];
-    snprintf(s, sizeof(s), "Player at (%d, %d) \t Player moving to: (%d, %d)", d->pc.x, d->pc.y, x, y);
-    render_top_bar(s, COLOR_DEFAULT_ID);
+    render_top_bar(
+        COLOR_DEFAULT_ID,
+        "Player Previously at: (%d, %d) \t Player Currently At: (%d, %d)",
+        d->pc.x, d->pc.y, x, y
+    );
 
     int move_result = move_player(d, x, y);
     
     if (move_result == 0) { // invalid move
-        render_top_bar("Invalid Player Movement, Try Again", COLOR_ERROR_ID);
+        render_top_bar(COLOR_ERROR_ID, "Invalid Player Movement, Try Again");
         return 0;  // Return invalid movement code
     } else if (move_result == MOVEMENT_STAIRS) {
-        render_top_bar("Player uses stairs", COLOR_STAIR_ID);
+        render_top_bar(COLOR_STAIR_ID, "Player uses stairs");
         return MOVEMENT_STAIRS; // Return stairs code
     }
 

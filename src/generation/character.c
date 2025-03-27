@@ -21,6 +21,9 @@ int init_monster(Monster *m, int x, int y, int ID, char curr_cell) {
     m->intelligent = rand() % 2, m->telepathy = rand() % 2;
     m->tunneling = rand() % 2, m->erratic = rand() % 2;
 
+    // m->intelligent = 1, m->telepathy = 0;
+    // m->tunneling = 0, m->erratic = 0;
+
     m->speed = (rand() % 16) + 5;
 
     m->x = x, m->y = y;

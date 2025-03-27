@@ -112,10 +112,11 @@ void destroy_dungeon(Dungeon *d){
     return;
 }
 
+// Reset dungeon
+// num_monsters is based of flag --nummon
 void reset_dungeon(Dungeon *d){
     destroy_dungeon(d);
     init_dungeon(d);
-    d->num_monsters = DEFAULT_NUM_MONSTERS;
     generate_random_dungeon(d);
 }
 

@@ -11,7 +11,7 @@
 void init_ncurses();
 void destroy_ncurses();
 
-void render_top_bar(const char *message, int color_id);
+void render_top_bar(int color_id, const char *format, ...);
 
 void render_grid(Dungeon *d);
 void render_game_over(Dungeon *d);

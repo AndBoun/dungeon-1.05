@@ -53,22 +53,12 @@ int main(int argc, char *argv[]) {
         // printf("Dungeon saved.\n");
     }
 
-    // print_grid(&d);
-    // reset_dungeon(&d);
-    // print_grid(&d);
-
-    // print_grid(&d);
-    // d.pc.x = 38, d.pc.y = 13;
-    // handle_player_movement(&d, -2, -2);
-    // // move_player(&d, -2, -2);
-    // printf("%c", d.grid[13][38].type);
-
     init_ncurses();
     
-    // start_gameplay(&d);
-
+    // Restart game when player uses stairs
     while (start_gameplay(&d) == -2){
         reset_dungeon(&d);
+        d.num_monsters = num_monsters;
     }
 
     destroy_dungeon(&d);
