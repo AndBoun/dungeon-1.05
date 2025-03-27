@@ -71,3 +71,6 @@ Lectures/.DS_Store
 !Makefile
 !README
 !CHANGELOG
+!docs
+!*.md
+!*.gif
