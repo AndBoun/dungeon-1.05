@@ -36,14 +36,15 @@ void init_ncurses() {
     noecho();              // Don't echo input characters
     curs_set(0);           // Hide cursor
     start_color();         // Enable colors
+    use_default_colors();  // Use default colors
     timeout(0);            // Non-blocking input
 
-    init_pair(COLOR_DEFAULT_ID, COLOR_WHITE, COLOR_BLACK);    // Default
-    init_pair(COLOR_PLAYER_ID, COLOR_MAGENTA, COLOR_YELLOW);  // Player
-    init_pair(COLOR_STAIR_ID, COLOR_GREEN, COLOR_BLACK);      // Stairs and Success
-    init_pair(COLOR_MONSTER_ID, COLOR_CYAN, COLOR_RED);       // Monster
-    init_pair(COLOR_ERROR_ID, COLOR_RED, COLOR_BLACK);        // ERROR
-    init_pair(COLOR_WARNING_ID, COLOR_YELLOW, COLOR_BLACK);   // Warning
+    init_pair(COLOR_DEFAULT_ID, COLOR_WHITE, -1);           // Default
+    init_pair(COLOR_PLAYER_ID, COLOR_WHITE, COLOR_YELLOW);  // Player
+    init_pair(COLOR_STAIR_ID, COLOR_GREEN, -1);             // Stairs and Success
+    init_pair(COLOR_MONSTER_ID, COLOR_CYAN, COLOR_RED);     // Monster
+    init_pair(COLOR_ERROR_ID, COLOR_RED, -1);               // ERROR
+    init_pair(COLOR_WARNING_ID, COLOR_YELLOW, -1);          // Warning
 }
 
 void destroy_ncurses() {
