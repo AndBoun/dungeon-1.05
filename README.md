@@ -49,3 +49,5 @@ To regenerate when the player uses a stair, first the program calls `start_gamep
 
 # Example Gameplay:
 https://github.com/user-attachments/assets/b69686fc-56af-42d4-81d8-cee3cc53a63c
+![1 05_gameplay](https://github.com/user-attachments/assets/51d2e122-3796-4f4a-8748-89d20c2a4353)
+
