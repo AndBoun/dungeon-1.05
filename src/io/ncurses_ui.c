@@ -91,7 +91,7 @@ void render_grid(Dungeon *d) {
                 attron(COLOR_PAIR(COLOR_MONSTER_ID));
             }
             
-            mvaddch(i + 1, j + 1, cell_type);
+            mvaddch(i + 1, j, cell_type);
         }
     }
 
@@ -208,9 +208,11 @@ int get_input(Dungeon *d) {
 }
 
 int handle_player_movement(Dungeon *d, int x, int y) {
+
+    // Avoid \t to keep centering of top bar message
     render_top_bar(
         COLOR_DEFAULT_ID,
-        "Player Previously at: (%d, %d) \t Player Currently At: (%d, %d)",
+        "Player Previously at: (%d, %d)          Player Currently At: (%d, %d)",
         d->pc.x, d->pc.y, x, y
     );
 
