@@ -1,3 +1,21 @@
+commit c601a7f6250d158313ab7d82b485ece083e0f99b
+Author: AndBoun <167598896+AndBoun@users.noreply.github.com>
+Date:   Wed Mar 26 21:26:35 2025 -0500
+
+    update readme with monsterlist contraint
+
+commit a8936103ae370428fc0f4840b7098b9d270696fa
+Author: AndBoun <167598896+AndBoun@users.noreply.github.com>
+Date:   Wed Mar 26 21:23:52 2025 -0500
+
+    fix print mvprintw in monsterlist. too many parameters.
+
+commit 318b5a019a92ffd1da015e1b56068d9d41f130b5
+Author: AndBoun <167598896+AndBoun@users.noreply.github.com>
+Date:   Wed Mar 26 21:14:19 2025 -0500
+
+    Make Changelog
+
 commit 2d083d355f3bdbb8ada215afa31f9bab3e3502bb
 Author: AndBoun <167598896+AndBoun@users.noreply.github.com>
 Date:   Wed Mar 26 21:13:55 2025 -0500
