@@ -36,6 +36,7 @@ int handle_monster_list(Dungeon *d){
 
         switch (input) {
             case 'q': // quit
+            case 'Q':
                 destroy_ncurses();
                 printf("Game terminated by user\n");
                 exit(0);

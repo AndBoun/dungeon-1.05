@@ -181,8 +181,10 @@ int get_input(Dungeon *d) {
             case '>': // Down stairs
                 result = handle_player_movement(d, -3, -3); // -3 for down stairs
                 break;
-                
+             
+
             case 'q': // quit
+            case 'Q':
                 destroy_ncurses();
                 printf("Game terminated by user\n");
                 exit(0);
